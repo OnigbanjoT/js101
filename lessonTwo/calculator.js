@@ -5,7 +5,7 @@ function prompt(message) {
 }
 
 function invalidNumber(number) {
-  return number.trimStart() === '' || Number.isNaN(Number(number));
+  return  Number.isNaN(Number(number));
 }
 
 prompt('Welcome to Calculator!');
