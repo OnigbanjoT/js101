@@ -1,53 +1,65 @@
 const readline = require('readline-sync');
+const messages = require('./calculator_messages.json');
 
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
 function invalidNumber(number) {
-  return  Number.isNaN(Number(number));
+  return  number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
-prompt('Welcome to Calculator!');
+function calculator(){
+  prompt(messages.welcome);
 
-prompt("What's the first number?");
-let number1 = readline.question();
+  prompt(messages.numberOne);
+  let number1 = readline.question();
+  
+  while (invalidNumber(number1)) {
+    prompt(messages.invalidNumber);
+    number1 = readline.question();
+  }
+  
+  prompt(messages.numberTwo);
+  let number2 = readline.question();
+  
+  while (invalidNumber(number2)) {
+    prompt(messages.invalidNumber);
+    number2 = readline.question();
+  }
+  
+  prompt(messages.operation);
+  let operation = readline.question();
+  
+  while (!['1', '2', '3', '4'].includes(operation)) {
+    prompt(messages.invalidOperation);
+    operation = readline.question();
+  }
+  
+  let output;
+  switch (operation) {
+    case '1':
+      output = Number(number1) + Number(number2);
+      break;
+    case '2':
+      output = Number(number1) - Number(number2);
+      break;
+    case '3':
+      output = Number(number1) * Number(number2);
+      break;
+    case '4':
+      output = Number(number1) / Number(number2);
+      break;
+  }
+  
+  prompt(`${messages.result} ${output}`);
+  
+  prompt(messages.anotherCalculation);
+  let answer = readline.question();
 
-while (invalidNumber(number1)) {
-  prompt("Hmm... that doesn't look like a valid number.");
-  number1 = readline.question();
+  if (answer == 'y'){
+    calculator();
+  }
 }
 
-prompt("What's the second number?");
-let number2 = readline.question();
-
-while (invalidNumber(number2)) {
-  prompt("Hmm... that doesn't look like a valid number.");
-  number2 = readline.question();
-}
-
-prompt('What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide');
-let operation = readline.question();
-
-while (!['1', '2', '3', '4'].includes(operation)) {
-  prompt('Must choose 1, 2, 3 or 4');
-  operation = readline.question();
-}
-
-let output;
-switch (operation) {
-  case '1':
-    output = Number(number1) + Number(number2);
-    break;
-  case '2':
-    output = Number(number1) - Number(number2);
-    break;
-  case '3':
-    output = Number(number1) * Number(number2);
-    break;
-  case '4':
-    output = Number(number1) / Number(number2);
-    break;
-}
-
-prompt(`The result is: ${output}`);
+calculator();
